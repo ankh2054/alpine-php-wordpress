@@ -1,17 +1,6 @@
 FROM alpine:3.6
 MAINTAINER Etopian Inc. <contact@etopian.com>
 
-LABEL   devoply.type="site" \
-        devoply.cms="wordpress" \
-        devoply.framework="wordpress" \
-        devoply.language="php7" \
-        devoply.require="mariadb etopian/nginx-proxy" \
-        devoply.recommend="redis" \
-        devoply.description="WordPress on Nginx and PHP-FPM with WP-CLI." \
-        devoply.name="WordPress" \
-        devoply.params="docker run -d --name {container_name} -e VIRTUAL_HOST={virtual_hosts} -v /data/sites/{domain_name}:/DATA etopian/alpine-php7-wordpress"
-
-
 
 RUN echo 'http://dl-4.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories\
     && apk update \
