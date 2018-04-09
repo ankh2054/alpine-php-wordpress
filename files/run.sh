@@ -93,25 +93,45 @@ set_mysql_root_pw() {
 }
 
 
+# 2.NGINX & PHP-FPM 
+#
+# ################
+
+create_www_dir() {
+  # Create LOG directoties for NGINX & PHP-FPM
+  echo "Creating www directories"
+  mkdir -p /DATA/logs/php-fpm
+  mkdir -p /DATA/logs/nginx
+  mkdir -p /DATA/www
+
+}
+
+apply_www_permissions(){
+  echo "Applying www permissions"
+  chown -R nginx:nginx /DATA/www /DATA/logs
+
+}
 
 
-[ -f /run-pre.sh ] && /run-pre.sh
-
-chown -R nginx:nginx /DATA
-
-if [ ! -d /DATA/htdocs ] ; then
-  mkdir -p /DATA/htdocs
-#  chown nginx:nginx /DATA/htdocs
-fi
 
 
-# start php-fpm
-mkdir -p /DATA/logs/php-fpm
-# start nginx
-mkdir -p /DATA/logs/nginx
-mkdir -p /tmp/nginx
-chown nginx:nginx /tmp/nginx
-chown -R nginx:nginx /DATA
+shutdown_mysql() {
+# shutdown mysql reeady for supervisor to start mysql.
+  timeout=10
+  echo "Shutting down Mysql ready for supervisor"
+  /usr/bin/mysqladmin -u root --password=${ROOT_PWD} shutdown
+  
+}
+
+create_data_dir
+create_run_dir
+create_log_dir
+mysql_default_install
+create_modx_database
+set_mysql_root_pw
+create_www_dir
+apply_www_permissions
+shutdown_mysql
 
 if [ ! -d /DATA/bin ] ; then
   mkdir /DATA/bin
@@ -125,5 +145,6 @@ fi
 
 
 
-php-fpm7
-nginx
+# Start Supervisor 
+echo "Starting Supervisor"
+/usr/bin/supervisord -n -c /etc/supervisord.conf
