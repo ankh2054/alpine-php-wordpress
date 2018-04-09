@@ -46,6 +46,9 @@ RUN echo 'http://dl-4.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositor
     php7-simplexml \
     mysql-client \
     openssh-client \
+    mysql \ 
+    supervisor \
+    mariadb-dev \
     git \
     curl \
     rsync \
