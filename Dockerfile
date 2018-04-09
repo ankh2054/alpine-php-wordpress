@@ -59,9 +59,12 @@ RUN sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php7/php.ini && \
     sed -i "s/nginx:x:100:101:nginx:\/var\/lib\/nginx:\/sbin\/nologin/nginx:x:100:101:nginx:\/DATA:\/bin\/bash/g" /etc/passwd-
 
 
-ADD files/nginx.conf /etc/nginx/
-ADD files/php-fpm.conf /etc/php7/
+# Add files
+ADD files/nginx.conf /etc/nginx/nginx.conf
+ADD files/php-fpm.conf /etc/php/7.0/fpm/
 ADD files/run.sh /
+ADD files/supervisord.conf /etc/supervisord.conf
+ADD files/my.cnf /etc/mysql/my.cnf
 ADD files/wp-config-devoply.php /usr/bin/wp-config-devoply
 RUN chmod +x /run.sh && chmod +x /usr/bin/wp-config-devoply
 
